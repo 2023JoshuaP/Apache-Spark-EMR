@@ -13,7 +13,6 @@ spark = SparkSession.builder \
 
 sc = spark.sparkContext
 
-# ¡EL CAMBIO CLAVE! Leemos desde HDFS
 text_rdd = sc.textFile("hdfs:///user/hadoop/datos_wordcount/wikipedia.txt")
 
 wordcount_rdd = text_rdd \
@@ -21,17 +20,13 @@ wordcount_rdd = text_rdd \
     .map(lambda word: (word, 1)) \
     .reduceByKey(lambda a, b: a + b)
 
-inicio = time.time()
+start = time.time()
 
-# Guardamos los resultados de vuelta en HDFS
 wordcount_rdd.saveAsTextFile("hdfs:///user/hadoop/resultados_wordcount/")
 
-fin = time.time()
-tiempo_total = fin - inicio
+end = time.time()
+total_time = end - start
 
-print("=====================================================")
-print(f"¡PROCESAMIENTO HDFS TERMINADO!")
-print(f"Time: {tiempo_total:.2f} seconds") 
-print("=====================================================")
+print(f"Time: {total_time:.2f} seconds") 
 
 spark.stop()
